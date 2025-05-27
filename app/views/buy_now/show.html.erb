@@ -1,0 +1,31 @@
+<div class="min-h-screen flex justify-center px-4 py-8">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-6xl items-start">
+
+    <!-- Left column: Product content -->
+    <div class="w-full flex flex-col items-center md:items-start text-center md:text-left">
+      <h1 class="text-4xl sm:text-5xl font-broken text-indigo-900 mb-5">
+        <%= @product.name %>
+      </h1>
+
+      <div class="max-w-2xl w-full">
+        <% if @product.images.any? %>
+          <%= image_tag @product.images.first, class: "w-full h-96 object-cover rounded-lg mb-4" %>
+        <% end %>
+
+        <div class="text-gray-700 text-lg">
+          <%= @product.description %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column: Stripe checkout -->
+    <div
+      class="flex justify-center md:justify-start items-start"
+      data-controller="stripe-checkout"
+      data-stripe-checkout-url-value="<%= product_buy_now_path(@product) %>">
+      <!-- Add your Stripe button/form here -->
+    </div>
+
+  </div>
+</div>
+
