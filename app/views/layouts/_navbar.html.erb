@@ -2,9 +2,11 @@
   <div class="max-w-7xl h-full w-full mx-auto flex items-center justify-between px-8">
     <%= link_to root_path, class: "flex items-end gap-4" do %>
       <%= image_tag("grocery-store.png", class: "w-10 object-cover") %>
-      <span class="text-2xl text-gray-100"> Riya's Shop </span>
+      <span class="text-2xl text-gray-100"> E-Commerce Rails </span>
     <% end %>
 
-    <%= image_tag("carts.png") %>
+    <%= link_to cart_path(@current_cart.secret_id) do %>
+      <%= render "layouts/cart", cart: @current_cart %>
+    <% end %>
   </div>
 </div>

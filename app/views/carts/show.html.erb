@@ -1,0 +1,24 @@
+<div class="w-full flex flex-col items-center px-4">
+  <div class="max-w-4xl w-full">
+    <div class="flex flex-col md:flex-row justify-between items-center w-full mb-6">
+      <div class="flex flex-col gap-4 text-center md:text-left">
+        <h1 class="text-5xl">Your cart</h1>
+        <% if @current_cart.cart_items.any? %>
+          <p class="text-lg">You have <%= @current_cart.cart_items.count %> item(s) in your cart</p>
+        <% else %>
+          <p class="text-lg">You don't have any items in your cart yet</p>
+        <% end %>
+      </div>
+
+      <%= link_to "Checkout Now", checkout_cart_path(@current_cart.secret_id), class: "mt-4 md:mt-0 rounded-lg font-semibold p-4 text-center text-xl bg-yellow-400 hover:bg-yellow-500" %>
+    </div>
+
+    <div id="products" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <% @current_cart.products.each do |product| %>
+        <div>
+          <%= render "products/product", product: product %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

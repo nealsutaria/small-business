@@ -8,7 +8,11 @@ Rails.application.routes.draw do
   end
 
 
-resources :carts, only: [:create]
+  resources :carts, only: [:create, :show] do
+    get "checkout", on: :member, to: "carts#checkout"
+    post "stripe_session", on: :member, to: "carts#stripe_session"
+    get "success", on: :member, to: "carts#success"
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resource :admin, only: [:show], controller: :admin
