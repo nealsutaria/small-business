@@ -17,6 +17,9 @@
       <% @current_cart.products.each do |product| %>
         <div>
           <%= render "products/product", product: product %>
+          <br/>
+          <%= link_to "Remove from cart", cart_path(@current_cart.secret_id, product_id: product.id), class: "p-2 rounded-lg bg-indigo-500 text-indigo-100",
+            data: { turbo_method: "delete" } %>
         </div>
       <% end %>
     </div>
