@@ -2,12 +2,13 @@
   <div class="max-w-7xl h-full w-full mx-auto flex items-center justify-between px-8">
     <%= link_to root_path, class: "flex items-end gap-1" do %>
       <%= image_tag("grocery-store.png", class: "w-10 object-cover") %>
-      <span class="text-2xl text-gray-100"> E-Commerce Rails </span>
+      <span class="text-2xl text-gray-100"> Riya's Shop </span>
     <% end %>
 
     <div class="flex items-center gap-6">
       <div>
         <% if current_user %>
+          <%= link_to "My Purchases", purchase_history_users_path, class: "text-indigo-100 p-4" %>
           <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete}, class: "text-indigo-100" %>
         <% else %>
           <%= link_to "Login", new_user_session_path, class: "bg-gray-500 text-gray-100 rounded-lg p-2" %>
@@ -15,9 +16,11 @@
           <% end %>
         </div>
 
-      <%= link_to cart_path(@current_cart.secret_id) do %>
-        <%= render "layouts/cart", cart: @current_cart %>
-      <% end %>
+      <div id="cart-count">
+        <%= link_to cart_path do %>
+          <%= render "layouts/cart", cart: @current_cart %>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>

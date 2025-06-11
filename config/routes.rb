@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'webhooks/stripe'
   devise_for :users
   resources :categories
   devise_for :admins
@@ -8,12 +9,14 @@ Rails.application.routes.draw do
     end
   end
 
-
-  resources :carts, only: [:create, :show, :destroy] do
-    get "checkout", on: :member, to: "carts#checkout"
+  resource :cart, only: [:show, :destroy, :create] do
+    get "checkout", on: :collection, to: "carts#checkout"
     post "stripe_session", on: :member, to: "carts#stripe_session"
-    get "success", on: :member, to: "carts#success"
+    get "success", to: "carts#success"
   end
+
+  post "/webhooks/stripe", to: "webhooks#stripe"
+  get 'users/purchase_history', to: 'users#purchase_history', as: :purchase_history_users
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resource :admin, only: [:show], controller: :admin

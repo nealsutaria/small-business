@@ -24,6 +24,11 @@ class BuyNowController < ApplicationController
         shipping_address_collection: {
           allowed_countries: STRIPE_SUPPORTED_COUNTRIES
         },
+        metadata: {
+          user_id: current_user&.id,
+          purchase_type: 'buy_now',
+          product_id: @product.id
+        },
         mode: 'payment',
         return_url: success_product_buy_now_url(@product),
     })

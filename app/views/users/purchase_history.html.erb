@@ -1,0 +1,45 @@
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6 text-gray-800">Your Purchase History</h1>
+
+  <% if current_user %>
+    <% if @purchases.present? %>
+      <div class="space-y-6">
+        <% @purchases.each do |purchase| %>
+          <div class="bg-white shadow-md rounded-xl p-6 border border-gray-200">
+            <div class="flex justify-between items-center mb-2">
+              <p class="text-lg font-semibold text-gray-700">
+                Purchased on: <%= purchase.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+              </p>
+              <% if purchase.amount_total.present? %>
+                <p class="text-lg text-indigo-600 font-medium pl-2">
+                  Total: $<%= '%.2f' % (purchase.amount_total.to_f / 100.0) %>
+                </p>
+              <% end %>
+            </div>
+
+            <% if purchase.product_names.any? %>
+              <div class="mt-3">
+                <p class="text-gray-600 mb-1 font-medium">Products:</p>
+                <ul class="divide-y divide-gray-100 border rounded-lg overflow-hidden">
+                  <% purchase.product_names.each do |product_name| %>
+                    <li class="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-800 text-sm">
+                      <%= product_name %>
+                    </li>
+                  <% end %>
+                </ul>
+              </div>
+            <% else %>
+              <p class="text-red-600 mt-3">No products found in this purchase.</p>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-gray-600 mt-6">You haven’t made any purchases yet.</p>
+    <% end %>
+  <% else %>
+    <p class="text-red-500">You must be signed in to view your purchase history.</p>
+    <%= link_to "Sign In", new_user_session_path, class: "underline text-blue-600" %>
+  <% end %>
+</div>
+

@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  stripe_checkout_id: MyString
+  amount_total: 1
+  product_names: MyText
+
+two:
+  user: two
+  stripe_checkout_id: MyString
+  amount_total: 1
+  product_names: MyText
