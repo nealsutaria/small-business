@@ -1,0 +1,12 @@
+<% if @current_cart.cart_items.find_by(product_id: @product.id) %>
+  <%= turbo_stream.replace "cart_item_#{@product.id}" do %>
+    <%= render partial: "carts/cart_item", locals: { product: @product, cart: @current_cart } %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.remove "cart_item_#{@product.id}" %>
+<% end %>
+
+<%= turbo_stream.update "cart" do %>
+  <%= render partial: "layouts/cart", locals: { cart: @current_cart } %>
+<% end %>
+

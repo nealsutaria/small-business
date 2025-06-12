@@ -1,0 +1,6 @@
+<%= turbo_stream.remove "cart_item_#{@product.id}" %>
+
+<%= turbo_stream.update "cart" do %>
+  <%= render partial: "layouts/cart", locals: { cart: @current_cart } %>
+<% end %>
+

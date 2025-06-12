@@ -1,0 +1,19 @@
+<div id="cart_item_<%= product.id %>" class="p-4 border rounded-lg shadow bg-white">
+  <h2 class="text-xl font-semibold"><%= product.name %></h2>
+  <p class="text-gray-700">Price: $<%= number_with_precision(product.price, precision: 2) %></p>
+
+  <% item = cart.cart_items.find_by(product_id: product.id) %>
+  <% if item %>
+    <p class="text-gray-600">Quantity: <%= item.quantity %></p>
+
+    <div class="flex gap-2 mt-2">
+      <%= button_to "+", cart_path(product_id: product.id), method: :post, form: { data: { turbo_stream: true } }, class: "px-3 py-1 bg-green-500 text-white rounded" %>
+
+      <%= button_to "-", remove_one_cart_item_cart_path(product_id: product.id), method: :delete, form: { data: { turbo_stream: true } }, class: "px-3 py-1 bg-red-500 text-white rounded" %>
+
+      <%= button_to "Remove All", remove_all_cart_item_cart_path(product_id: product.id), method: :delete, form: { data: { turbo_stream: true } }, class: "px-3 py-1 bg-gray-500 text-white rounded ml-2" %>
+
+    </div>
+  <% end %>
+</div>
+

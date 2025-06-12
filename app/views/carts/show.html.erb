@@ -3,11 +3,9 @@
     <div class="flex flex-col md:flex-row justify-between items-center w-full mb-6">
       <div class="flex flex-col gap-4 text-center md:text-left">
         <h1 class="text-5xl">Your cart</h1>
-        <% if @current_cart&.cart_items&.any? %>
-          <p class="text-lg">You have <%= @current_cart.cart_items.count %> item(s) in your cart</p>
-        <% else %>
-          <p class="text-lg">You don't have any items in your cart yet. To checkout, please add an item. </p>
-        <% end %>
+          <div id="cart-summary">
+            <%= render partial: "carts/cart_summary", locals: { cart: @current_cart } %>
+          </div>
       </div>
 
       <% if @current_cart&.cart_items&.any? %>
@@ -19,19 +17,13 @@
 
     <div id="products" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
       <% if @current_cart&.products&.any? %>
-        <% @current_cart.products.each do |product| %>
-          <div>
-            <%= render "products/product", product: product %>
-            <br/>
-            <%= link_to "Remove from cart", cart_path(product_id: product.id), class: "p-2 rounded-lg bg-indigo-500 text-indigo-100",
-              data: { turbo_method: "delete" } %>
-          </div>
+        <% @current_cart.products.uniq.each do |product| %>
+          <%= render partial: "carts/cart_item", locals: { product: product, cart: @current_cart } %>
         <% end %>
       <% end %>
     </div>
   </div>
 
-  <br/>
-
-  <%= link_to "Sign in to save your cart for later", new_user_session_path, class: "text-lg text-indigo-600 font-semibold border-b-2 border-indigo-200" if !current_user%>
+  <%= link_to "Sign in to save your cart for later", new_user_session_path, class: "text-lg text-indigo-600 font-semibold border-b-2 border-indigo-200" unless current_user %>
 </div>
+

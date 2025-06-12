@@ -1,0 +1,8 @@
+<%= turbo_stream.replace "cart_item_#{product.id}" do %>
+  <%= render partial: "carts/cart_item", locals: { product: product, cart: @current_cart } %>
+<% end %>
+
+<%= turbo_stream.update "cart" do %>
+  <%= render partial: "layouts/cart", locals: { cart: @current_cart } %>
+<% end %>
+

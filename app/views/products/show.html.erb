@@ -29,11 +29,12 @@
       <div class="flex justify-between gap-8">
         <%= link_to "Buy Now", product_buy_now_path(@product), class: "rounded-lg font-semibold p-4 text-center text-xl bg-yellow-400 hover:bg-yellow-500 w-50 mr-auto" %>
         <%= render "add_to_cart", product: @product%>
-
       </div>
+       <p> Please go to cart page <b>(cart icon on top)</b> to update quantity and add/remove product </p>
 
     </div>
   </div>
+
 
   <% if current_admin %>
     <div class="w-full flex justify-center items-center mt-16 gap-4">

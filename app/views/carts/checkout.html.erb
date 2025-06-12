@@ -1,26 +1,50 @@
 <div class="w-full grid md:grid-cols-2">
   <div class="w-full flex flex-col items-center md:pt-8">
-    <h1 class="text-5xl font-broken text-indigo-900 text-center"> Your Cart </h1>
-    <% if @current_cart&.cart_items&.any? %>
+    <h1 class="text-5xl font-broken text-indigo-900 text-center">Your Cart</h1>
 
-      <p> You have <%= @current_cart.cart_items.count %> products in your cart </p>
-      <div class="mx-auto flex flex-col gap-2">
-        <% @current_cart.products.each.with_index do |product, index| %>
-          <div class="flex gap-2 bg-gray-700/75 p-2">
-            <span class="px-2 rounded-full bg-gray-500 text-gray-100"> <%= index + 1 %> </span>
-            <p class="text-indigo-100"> <%= product.name %> </p>
-            <p class="text-green-500"> <%= number_to_currency product.price %> </p>
+    <% if @current_cart&.cart_items&.any? %>
+      <p class="mt-4 text-lg">
+        You have <%= @current_cart.cart_items.sum(:quantity) %> item(s) in your cart
+      </p>
+
+      <div class="mx-auto flex flex-col gap-2 mt-6 w-full max-w-lg">
+        <% @current_cart.cart_items.includes(:product).each.with_index do |item, index| %>
+          <div class="flex justify-between items-center gap-4 bg-gray-700/75 p-4 rounded">
+            <div class="flex items-center gap-4">
+              <span class="px-3 py-1 rounded-full bg-gray-500 text-gray-100 font-semibold">
+                <%= index + 1 %>
+              </span>
+              <div>
+                <p class="text-indigo-100 font-semibold"><%= item.product.name %></p>
+                <p class="text-sm text-gray-300">
+                  $<%= '%.2f' % item.product.price %> × <%= item.quantity %>
+                </p>
+              </div>
+            </div>
+            <div class="text-yellow-400 font-bold">
+              = <%= number_to_currency(item.product.price * item.quantity) %>
+            </div>
           </div>
         <% end %>
+
+        <div class="flex justify-end items-center gap-2 text-lg font-semibold mt-4 text-indigo-100 border-t pt-4">
+          Total:
+          <span class="text-indigo-400">
+            <%= number_to_currency(@current_cart.cart_items.sum { |item| item.product.price * item.quantity }) %>
+          </span>
+        </div>
       </div>
     <% else %>
-      <p> You don't have any items in your cart yet! </p>
+      <p class="mt-4 text-lg">You don't have any items in your cart yet!</p>
     <% end %>
   </div>
 
-
   <% if @current_cart&.cart_items&.any? %>
-    <div data-controller="stripe-checkout" data-stripe-checkout-url-value="<%=stripe_session_cart_path(@current_cart.secret_id) %>">
+    <div
+      data-controller="stripe-checkout"
+      data-stripe-checkout-url-value="<%= stripe_session_cart_path(@current_cart.secret_id) %>"
+    >
     </div>
   <% end %>
 </div>
+

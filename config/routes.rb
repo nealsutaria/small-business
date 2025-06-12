@@ -13,6 +13,12 @@ Rails.application.routes.draw do
     get "checkout", on: :collection, to: "carts#checkout"
     post "stripe_session", on: :member, to: "carts#stripe_session"
     get "success", to: "carts#success"
+    delete "remove_one_cart_item", to: "carts#remove_one_cart_item"
+    delete "remove_all_cart_item", to: "carts#remove_all_cart_item"
+  end
+
+  resources :cart_items, only: [] do
+    patch :update_quantity, on: :member
   end
 
   post "/webhooks/stripe", to: "webhooks#stripe"

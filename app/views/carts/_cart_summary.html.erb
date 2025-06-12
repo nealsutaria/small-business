@@ -1,0 +1,5 @@
+<% if cart.cart_items.any? %>
+  <p class="text-lg">You have <%= cart.cart_items.sum(:quantity) %> item(s) in your cart</p>
+<% else %>
+  <p class="text-lg">You don't have any items in your cart yet. To checkout, please add an item.</p>
+<% end %>
