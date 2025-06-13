@@ -1,47 +1,56 @@
-<div class="w-full">
+<div class="w-full max-w-7xl mx-auto px-6 py-10">
   <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+    <p class="py-2 px-3 bg-green-100 mb-5 text-green-800 font-medium rounded-lg" id="notice">
+      <%= notice %>
+    </p>
   <% end %>
 
-  <div class="max-w-7xl w-full mx-auto px-10 mb-2">
-    <%= link_to "Products:", products_path, class: "text-xl text-gray-100 hover:text-gray-200" %>
-    <%= link_to "#{@product.category.name} -", @product.category, class: "text-xl text-gray-100" if @product.category %>
-    <%= link_to "#{@product.name}", @product, class: "text-xl text-gray-100" %>
+  <div class="text-sm text-gray-500 mb-4">
+    <%= link_to "Products", products_path, class: "hover:underline" %>
+    &raquo;
+    <% if @product.category %>
+      <%= link_to @product.category.name, @product.category, class: "hover:underline" %>
+      &raquo;
+    <% end %>
+    <%= @product.name %>
   </div>
-  <div class="grid md:grid-cols-2">
-    <div class="max-w-md w-full mx-auto">
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- Product Images -->
+    <div class="space-y-4">
       <% if @product.images.any? %>
-        <%= image_tag @product.images.first, class: "w-full h-96 object-cover" %>
-        <div class="grid grid-cols-3 gap-4 mt-4">
+        <%= image_tag @product.images.first, class: "rounded-xl w-full h-96 object-cover" %>
+        <div class="grid grid-cols-3 gap-2">
           <% @product.images[1..].each do |image| %>
-            <%= image_tag image, class: "w-full h-32 object-cover" %>
+            <%= image_tag image, class: "rounded-md h-24 w-full object-cover" %>
           <% end %>
         </div>
       <% end %>
     </div>
-    <div class="max-w-xl flex flex-col gap-4">
-      <h1 class="text-5xl font-broken text-indigo-900"> <%= @product.name %> </h1>
-      <div class="text-gray-700">
-        <%= @product.description %>
-      </div>
-      <span class="bg-green-500 p-2 rounded-lg text-green-50 mr-auto"> <%= number_to_currency @product.price %> </span>
 
-      <div class="flex justify-between gap-8">
-        <%= link_to "Buy Now", product_buy_now_path(@product), class: "rounded-lg font-semibold p-4 text-center text-xl bg-yellow-400 hover:bg-yellow-500 w-50 mr-auto" %>
-        <%= render "add_to_cart", product: @product%>
-      </div>
-       <p> Please go to cart page <b>(cart icon on top)</b> to update quantity and add/remove product </p>
+    <!-- Product Info -->
+    <div class="flex flex-col gap-4">
+      <h1 class="text-4xl font-bold text-indigo-900"><%= @product.name %></h1>
+      <p class="text-gray-600 leading-relaxed"><%= @product.description %></p>
+      <span class="text-2xl font-semibold text-green-600">
+        <%= number_to_currency @product.price %>
+      </span>
 
+      <div class="mt-6">
+        <%= render "add_to_cart", product: @product %>
+      </div>
+
+      <p class="text-sm text-gray-500 mt-4">To change quantity or remove items, visit your cart using the icon at the top right.</p>
+
+      <% if current_admin %>
+        <div class="flex gap-3 mt-6">
+          <%= link_to "Edit", edit_product_path(@product), class: "text-sm px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md" %>
+          <%= link_to "Back", products_path, class: "text-sm px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md" %>
+          <%= button_to "Delete", @product, method: :delete, class: "text-sm px-4 py-2 bg-red-200 hover:bg-red-300 rounded-md" %>
+        </div>
+      <% end %>
     </div>
   </div>
-
-
-  <% if current_admin %>
-    <div class="w-full flex justify-center items-center mt-16 gap-4">
-      <%= link_to "Edit this product", edit_product_path(@product), class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-      <%= link_to "Back to products", products_path, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-      <%= button_to "Destroy this product", @product, method: :delete, class: "rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
-    </div>
-  <% end %>
 </div>
+
 

@@ -1,10 +1,19 @@
-<div id="add-to-cart" class="w-full flex">
-  <% if @current_cart && @current_cart.products.where(id: @product.id).any? %>
-    <div class="rounded-lg font-semibold p-4 text-center text-xl bg-gray-400 hover:bg-gray-500 w-full">
-      Already in Cart
+<%= form_with url: cart_path, method: :post, data: { turbo: true }, class: "w-full" do |form| %>
+  <div class="space-y-4 p-4 border rounded-lg shadow bg-white">
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Color</label>
+      <%= form.select :color, ["Red", "Blue", "Green"], {}, class: "w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" %>
     </div>
-  <% else %>
-    <%= link_to "Add To Cart", cart_path(product_id: @product.id), class: "rounded-lg font-semibold p-4 text-center text-xl bg-gray-400 hover:bg-gray-500 w-full",
-        data: { turbo_method: "post" } %>
-  <% end %>
-</div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Size</label>
+      <%= form.select :size, ["S", "M", "L", "XL"], {}, class: "w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" %>
+    </div>
+
+    <%= form.hidden_field :product_id, value: product.id %>
+
+    <%= form.submit "Add to Cart", class: "w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-150 ease-in-out" %>
+  </div>
+<% end %>
+

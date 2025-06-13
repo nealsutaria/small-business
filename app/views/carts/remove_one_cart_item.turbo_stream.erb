@@ -1,12 +1,15 @@
-<% if @current_cart.cart_items.find_by(product_id: @product.id) %>
-  <%= turbo_stream.replace "cart_item_#{@product.id}" do %>
-    <%= render partial: "carts/cart_item", locals: { product: @product, cart: @current_cart } %>
+<% dom_id = "cart_item_#{@product.id}_#{params[:size]}_#{params[:color]}".parameterize %>
+<% item = @current_cart.cart_items.find_by(product_id: @product.id, size: params[:size], color: params[:color]) %>
+
+<% if item %>
+  <%= turbo_stream.replace dom_id do %>
+    <%= render partial: "carts/cart_item", locals: { cart_item: item, cart: @current_cart } %>
   <% end %>
 <% else %>
-  <%= turbo_stream.remove "cart_item_#{@product.id}" %>
+  <%= turbo_stream.remove dom_id %>
 <% end %>
 
-<%= turbo_stream.update "cart" do %>
-  <%= render partial: "layouts/cart", locals: { cart: @current_cart } %>
-<% end %>
+<%= turbo_stream.update "cart", partial: "layouts/cart", locals: { cart: @current_cart } %>
+<%= turbo_stream.update "cart-summary", partial: "carts/cart_summary", locals: { cart: @current_cart } %>
+
 

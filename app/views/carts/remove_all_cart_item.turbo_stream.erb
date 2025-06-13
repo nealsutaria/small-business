@@ -1,6 +1,6 @@
-<%= turbo_stream.remove "cart_item_#{@product.id}" %>
+<% dom_id = "cart_item_#{@product.id}_#{params[:size]}_#{params[:color]}".parameterize %>
 
-<%= turbo_stream.update "cart" do %>
-  <%= render partial: "layouts/cart", locals: { cart: @current_cart } %>
-<% end %>
+<%= turbo_stream.remove dom_id %>
+<%= turbo_stream.update "cart", partial: "layouts/cart", locals: { cart: @current_cart } %>
+<%= turbo_stream.update "cart-summary", partial: "carts/cart_summary", locals: { cart: @current_cart } %>
 

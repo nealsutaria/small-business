@@ -17,8 +17,8 @@
 
     <div id="products" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
       <% if @current_cart&.products&.any? %>
-        <% @current_cart.products.uniq.each do |product| %>
-          <%= render partial: "carts/cart_item", locals: { product: product, cart: @current_cart } %>
+        <% @current_cart.cart_items.each do |cart_item| %>
+          <%= render partial: "carts/cart_item", locals: { product: cart_item.product, cart: @current_cart, cart_item: cart_item } %>
         <% end %>
       <% end %>
     </div>
