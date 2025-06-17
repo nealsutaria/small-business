@@ -1,50 +1,51 @@
-<div class="w-full grid md:grid-cols-2">
-  <div class="w-full flex flex-col items-center md:pt-8">
-    <h1 class="text-5xl font-broken text-indigo-900 text-center">Your Cart</h1>
+<div class="w-full min-h-screen bg-gray-100 py-10 px-4">
+  <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 bg-white shadow-xl rounded-xl p-6">
 
-    <% if @current_cart&.cart_items&.any? %>
-      <p class="mt-4 text-lg">
-        You have <%= @current_cart.cart_items.sum(:quantity) %> item(s) in your cart
-      </p>
+    <!-- Cart Items Section -->
+    <div class="space-y-6">
+      <h1 class="text-4xl font-bold text-indigo-900">Your Cart</h1>
 
-      <div class="mx-auto flex flex-col gap-2 mt-6 w-full max-w-lg">
-        <% @current_cart.cart_items.includes(:product).each.with_index do |item, index| %>
-          <div class="flex justify-between items-center gap-4 bg-gray-700/75 p-4 rounded">
-            <div class="flex items-center gap-4">
-              <span class="px-3 py-1 rounded-full bg-gray-500 text-gray-100 font-semibold">
-                <%= index + 1 %>
-              </span>
-              <div>
-                <p class="text-indigo-100 font-semibold"><%= item.product.name %></p>
-                <p class="text-sm text-gray-300">
-                  $<%= '%.2f' % item.product.price %> × <%= item.quantity %>
-                </p>
-              </div>
+      <% if @current_cart&.cart_items&.any? %>
+        <% @current_cart.cart_items.includes(:product).each do |item| %>
+          <div class="flex justify-between items-center bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm">
+            <div>
+              <p class="text-lg font-semibold text-gray-800"><%= item.product.name %></p>
+              <p class="text-sm text-gray-500">Color: <%= item.color %> | Size: <%= item.size %></p>
+              <p class="text-sm text-gray-600">
+                <%= number_to_currency(item.product.price) %> × <%= item.quantity %>
+              </p>
             </div>
-            <div class="text-yellow-400 font-bold">
-              = <%= number_to_currency(item.product.price * item.quantity) %>
+            <div class="text-right text-indigo-600 font-bold text-lg">
+              <%= number_to_currency(item.product.price * item.quantity) %>
             </div>
           </div>
         <% end %>
 
-        <div class="flex justify-end items-center gap-2 text-lg font-semibold mt-4 text-indigo-100 border-t pt-4">
-          Total:
-          <span class="text-indigo-400">
+        <div class="flex justify-between items-center pt-6 border-t text-xl font-bold text-gray-800">
+          <span>Total</span>
+          <span class="text-green-600">
             <%= number_to_currency(@current_cart.cart_items.sum { |item| item.product.price * item.quantity }) %>
           </span>
         </div>
+      <% else %>
+        <p class="text-lg text-gray-600">You don't have any items in your cart yet!</p>
+      <% end %>
+    </div>
+
+    <!-- Stripe Checkout Section -->
+    <% if @current_cart&.cart_items&.any? %>
+      <div class="flex flex-col items-center justify-center bg-indigo-50 border border-indigo-200 rounded-lg p-6 shadow">
+        <h2 class="text-2xl font-semibold text-indigo-800 mb-4">Ready to Checkout?</h2>
+        <p class="text-gray-700 mb-6 text-center">Secure your items and enter shipping info with Stripe.</p>
+
+        <div
+          data-controller="stripe-checkout"
+          data-stripe-checkout-url-value="<%= stripe_session_cart_path(@current_cart.secret_id) %>"
+          class="w-full"
+        ></div>
       </div>
-    <% else %>
-      <p class="mt-4 text-lg">You don't have any items in your cart yet!</p>
     <% end %>
   </div>
-
-  <% if @current_cart&.cart_items&.any? %>
-    <div
-      data-controller="stripe-checkout"
-      data-stripe-checkout-url-value="<%= stripe_session_cart_path(@current_cart.secret_id) %>"
-    >
-    </div>
-  <% end %>
 </div>
+
 

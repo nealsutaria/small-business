@@ -30,6 +30,7 @@ class CartsController < ApplicationController
     end
   end
 
+
   def destroy
     @cart_item = @current_cart.cart_items.find_by_product_id(@product.id)
     @cart_item.destroy
@@ -40,16 +41,17 @@ class CartsController < ApplicationController
     session = Stripe::Checkout::Session.create({
       ui_mode: 'embedded',
       line_items: @current_cart.cart_items.map do |item|
-      {
-        price_data: {
-          currency: "usd",
-          unit_amount: (item.product.price * 100).to_i,
-          product_data: {
-            name: item.product.name
+        {
+          price_data: {
+            currency: "usd",
+            unit_amount: (item.product.price * 100).to_i,
+            product_data: {
+              name: item.product.name,
+              description: "Color: #{item.color}, Size: #{item.size}"
+            },
           },
-        },
-        quantity: item.quantity
-      }
+          quantity: item.quantity
+        }
       end,
         shipping_address_collection: {
           allowed_countries: STRIPE_SUPPORTED_COUNTRIES

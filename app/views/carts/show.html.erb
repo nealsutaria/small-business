@@ -9,7 +9,7 @@
       </div>
 
       <% if @current_cart&.cart_items&.any? %>
-        <%= link_to "Checkout Now", checkout_cart_path, class: "mt-4 md:mt-0 rounded-lg font-semibold p-4 text-center text-xl bg-yellow-400 hover:bg-yellow-500" %>
+        <%= link_to "Checkout Now", checkout_cart_path, class: "mt-4 md:mt-0 rounded-lg font-semibold p-4 text-center text-xl bg-yellow-400 hover:bg-yellow-500", data: { turbo: false } %>
       <% else %>
         <%= content_tag :div, "Checkout Now", class: "mt-4 md:mt-0 rounded-lg font-semibold p-4 text-center text-xl bg-yellow-400 hover:bg-yellow-400 brightness-75" %>
       <% end %>
