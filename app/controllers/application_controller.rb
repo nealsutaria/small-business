@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::Base
   before_action :set_current_cart
+  before_action :set_time_zone
+
 
   protected
 
@@ -41,6 +43,7 @@ class ApplicationController < ActionController::Base
     super
   end
 
+
   private
 
   def set_current_cart
@@ -62,4 +65,18 @@ class ApplicationController < ActionController::Base
       session[:current_cart_id] = @current_cart.secret_id
     end
   end
+
+  def set_time_zone
+    return if Rails.env.test?
+
+    ip = request.remote_ip == "127.0.0.1" ? "8.8.8.8" : request.remote_ip
+    location = Geocoder.search(ip).first
+
+    if location && location.data["timezone"].present?
+      Time.zone = location.data["timezone"]
+    else
+      Time.zone = "Central Time (US & Canada)" # fallback
+    end
+  end
+
 end

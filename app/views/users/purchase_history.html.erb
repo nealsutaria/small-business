@@ -8,7 +8,7 @@
           <div class="bg-white shadow-md rounded-xl p-6 border border-gray-200">
             <div class="flex justify-between items-center mb-4">
               <p class="text-lg font-semibold text-gray-700">
-                Purchased on: <%= purchase.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+                Purchased on: <%= Time.zone.at(purchase.created_at).strftime("%B %d, %Y at %I:%M %p %Z") %>
               </p>
               <% if purchase.amount_total.present? %>
                 <p class="text-lg text-indigo-600 font-bold">
