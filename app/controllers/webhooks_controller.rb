@@ -46,11 +46,22 @@ class WebhooksController < ApplicationController
       cart = Cart.find_by(id: metadata["cart_id"])
       return unless cart
 
+      # Build detailed item info
+      item_details = cart.cart_items.includes(:product).map do |item|
+        {
+          name: item.product.name,
+          quantity: item.quantity,
+          size: item.size,
+          color: item.color,
+          subtotal: item.product.price.to_f * item.quantity
+        }
+      end
+
       Purchase.create!(
         user: user,
         stripe_checkout_id: session.id,
         amount_total: session.amount_total,
-        product_names: cart.products.map(&:name)
+        product_details: item_details
       )
     end
   end

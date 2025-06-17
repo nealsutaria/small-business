@@ -3,12 +3,12 @@
 
     <div>
       <label class="block text-sm font-medium text-gray-700 mb-1">Color</label>
-      <%= form.select :color, ["Red", "Blue", "Green"], {}, class: "w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" %>
+      <%= form.select :color, ["White", "Black", "Blue", "Gray"], {}, class: "w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" %>
     </div>
 
     <div>
       <label class="block text-sm font-medium text-gray-700 mb-1">Size</label>
-      <%= form.select :size, ["S", "M", "L", "XL"], {}, class: "w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" %>
+      <%= form.select :size, ["XS", "S", "M", "L", "XL", "2XL"], {}, class: "w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" %>
     </div>
 
     <%= form.hidden_field :product_id, value: product.id %>

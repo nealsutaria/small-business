@@ -87,21 +87,38 @@ class CartsController < ApplicationController
     color = params[:color]
 
     item = @current_cart.cart_items.find_by(product_id: params[:product_id], size: size, color: color)
-    item.decrement!(:quantity) if item&.quantity.to_i > 1
-    item.destroy if item&.quantity.to_i <= 1
+
+    if item
+      if item.quantity > 1
+        item.decrement!(:quantity)
+      else
+        item.destroy
+      end
+    end
 
     dom_id = "cart_item_#{params[:product_id]}_#{size}_#{color}".parameterize
 
     respond_to do |format|
       format.turbo_stream do
-        render turbo_stream: [
-          turbo_stream.replace(dom_id, partial: "carts/cart_item", locals: { cart_item: item, cart: @current_cart }) ,
-          turbo_stream.update("cart", partial: "layouts/cart", locals: { cart: @current_cart }),
-          turbo_stream.update("cart-summary", partial: "carts/cart_summary", locals: { cart: @current_cart })
-        ]
+        if @current_cart.cart_items.exists?(product_id: params[:product_id], size: size, color: color)
+          updated_item = @current_cart.cart_items.find_by(product_id: params[:product_id], size: size, color: color)
+
+          render turbo_stream: [
+            turbo_stream.replace(dom_id, partial: "carts/cart_item", locals: { cart_item: updated_item, cart: @current_cart }),
+            turbo_stream.update("cart", partial: "layouts/cart", locals: { cart: @current_cart }),
+            turbo_stream.update("cart-summary", partial: "carts/cart_summary", locals: { cart: @current_cart })
+          ]
+        else
+          render turbo_stream: [
+            turbo_stream.remove(dom_id),
+            turbo_stream.update("cart", partial: "layouts/cart", locals: { cart: @current_cart }),
+            turbo_stream.update("cart-summary", partial: "carts/cart_summary", locals: { cart: @current_cart })
+          ]
+        end
       end
     end
   end
+
 
 
   def remove_all_cart_item
