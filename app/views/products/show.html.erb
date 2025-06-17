@@ -1,56 +1,63 @@
-<div class="w-full max-w-7xl mx-auto px-6 py-10">
+<div class="max-w-7xl mx-auto px-6 py-12">
   <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-100 mb-5 text-green-800 font-medium rounded-lg" id="notice">
+    <p class="py-3 px-4 bg-green-100 mb-6 text-green-800 font-medium rounded-lg shadow-sm" id="notice">
       <%= notice %>
     </p>
   <% end %>
 
+  <!-- Breadcrumb -->
   <div class="text-sm text-gray-500 mb-4">
-    <%= link_to "Products", products_path, class: "hover:underline" %>
-    &raquo;
+    <%= link_to "Products", products_path, class: "hover:underline" %> &raquo;
     <% if @product.category %>
-      <%= link_to @product.category.name, @product.category, class: "hover:underline" %>
-      &raquo;
+      <%= link_to @product.category.name, @product.category, class: "hover:underline" %> &raquo;
     <% end %>
     <%= @product.name %>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-    <!-- Product Images -->
-    <div class="space-y-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+    <!-- Image Gallery -->
+    <div>
       <% if @product.images.any? %>
-        <%= image_tag @product.images.first, class: "rounded-xl w-full h-96 object-cover" %>
-        <div class="grid grid-cols-3 gap-2">
-          <% @product.images[1..].each do |image| %>
-            <%= image_tag image, class: "rounded-md h-24 w-full object-cover" %>
-          <% end %>
+        <div class="w-full h-[480px] rounded-lg overflow-hidden">
+          <%= image_tag @product.images.first, class: "w-full h-full object-contain bg-white p-1" %>
         </div>
+
+        <% if @product.images.size > 1 %>
+          <div class="grid grid-cols-4 gap-3 mt-4">
+            <% @product.images[1..].each do |image| %>
+              <div class="h-24 rounded-md overflow-hidden border border-gray-200 hover:shadow-sm bg-white p-0.5">
+                <%= image_tag image, class: "w-full h-full object-contain" %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
       <% end %>
     </div>
 
     <!-- Product Info -->
-    <div class="flex flex-col gap-4">
-      <h1 class="text-4xl font-bold text-indigo-900"><%= @product.name %></h1>
-      <p class="text-gray-600 leading-relaxed"><%= @product.description %></p>
-      <span class="text-2xl font-semibold text-green-600">
-        <%= number_to_currency @product.price %>
-      </span>
+    <div class="flex flex-col justify-between gap-6">
+      <div>
+        <h1 class="text-4xl font-bold text-gray-900 mb-2"><%= @product.name %></h1>
+        <p class="text-gray-600 leading-relaxed text-lg mb-4"><%= @product.description %></p>
+        <p class="text-3xl font-semibold text-green-600"><%= number_to_currency @product.price %></p>
+      </div>
 
-      <div class="mt-6">
+      <div class="mt-4">
         <%= render "add_to_cart", product: @product %>
       </div>
 
-      <p class="text-sm text-gray-500 mt-4">To change quantity or remove items, visit your cart using the icon at the top right.</p>
+      <p class="text-sm text-gray-500">To change quantity or remove items, visit your cart using the icon at the top right.</p>
 
       <% if current_admin %>
-        <div class="flex gap-3 mt-6">
+        <div class="flex flex-wrap gap-3 mt-6">
           <%= link_to "Edit", edit_product_path(@product), class: "text-sm px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md" %>
           <%= link_to "Back", products_path, class: "text-sm px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md" %>
-          <%= button_to "Delete", @product, method: :delete, class: "text-sm px-4 py-2 bg-red-200 hover:bg-red-300 rounded-md" %>
+          <%= button_to "Delete", @product, method: :delete, data: { confirm: "Are you sure?" }, class: "text-sm px-4 py-2 bg-red-200 hover:bg-red-300 rounded-md" %>
         </div>
       <% end %>
     </div>
   </div>
 </div>
+
 
 
