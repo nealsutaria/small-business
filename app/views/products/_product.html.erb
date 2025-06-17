@@ -1,7 +1,17 @@
-<%= link_to product do %>
-  <div id="<%= dom_id product %>">
-    <%= image_tag product.images.first, class: "w-full h-80 object-cover rounded-lg hover:brightness-75 transition-all duration-250" if product.images.any? %>
-    <p class="text-lg text-gray-50"> <%= product.name %> </p>
-    <p class="text-lg text-gray-100"> <%= number_to_currency product.price %> </p>
+<%= link_to product_path(product), class: "block bg-white rounded-xl shadow hover:shadow-md transition overflow-hidden border border-gray-100" do %>
+  <div class="w-full h-64 overflow-hidden">
+    <% if product.images.any? %>
+      <%= image_tag product.images.first, class: "w-full h-full object-cover transition-transform duration-300 hover:scale-105" %>
+    <% else %>
+      <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
+        No Image
+      </div>
+    <% end %>
+  </div>
+
+  <div class="p-4">
+    <h2 class="text-lg font-semibold text-gray-800 truncate"><%= product.name %></h2>
+    <p class="text-indigo-600 text-md font-bold mt-1"><%= number_to_currency product.price %></p>
   </div>
 <% end %>
+
