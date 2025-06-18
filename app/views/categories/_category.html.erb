@@ -1,6 +1,17 @@
-<%= link_to category do %>
-  <div id="<%= dom_id category %>" class="relative flex items-center justify-center">
-    <%= image_tag category.image, class: "w-full h-80 object-cover rounded-lg brightness-75 hover:brightness-50 transition-all duration-250" if category.image.attached? %>
-    <p class="text-lg text-gray-50 absolute text-3xl font-bold"> <%= category.name %> </p>
+<%= link_to category_path(category), class: "block group rounded-xl overflow-hidden shadow-sm hover:shadow-md transition border border-gray-100" do %>
+  <div class="relative w-full h-56 md:h-64 bg-gray-100">
+    <% if category.image.attached? %>
+      <%= image_tag category.image, class: "w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" %>
+    <% else %>
+      <div class="w-full h-full flex items-center justify-center text-gray-400">
+        No Image Available
+      </div>
+    <% end %>
+
+    <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
+      <h2 class="text-white text-xl md:text-2xl font-bold drop-shadow-sm text-center px-2">
+        <%= category.name %>
+      </h2>
+    </div>
   </div>
 <% end %>

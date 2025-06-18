@@ -1,15 +1,18 @@
-<div class="w-full">
+<div class="w-full max-w-7xl mx-auto px-6 py-12">
   <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+    <p class="py-2 px-4 bg-green-50 text-green-700 border border-green-200 rounded-lg mb-6 font-medium" id="notice">
+      <%= notice %>
+    </p>
   <% end %>
 
-  <% content_for :title, "Categories" %>
+  <% content_for :title, "Shop by Category" %>
 
-  <h1 class="font-bold text-7xl text-center font-broken text-indigo-700">All Categories</h1>
+  <h1 class="text-4xl md:text-6xl font-extrabold text-center text-indigo-700 mb-10">Explore Categories</h1>
 
-  <div id="categories" class="min-w-full grid md:grid-cols-4 gap-8">
+  <div id="categories" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
     <% @categories.each do |category| %>
-      <%= render category %>
+      <%= render partial: "category", locals: { category: category } %>
     <% end %>
   </div>
 </div>
+
